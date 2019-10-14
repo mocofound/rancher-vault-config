@@ -14,7 +14,7 @@ provider "vault" {
   address = data.terraform_remote_state.k8s_cluster.outputs.vault_addr
 }
 
-data "terraform_remote_state" "k8s_cluster" {
+data "terraform_remote_state" "userdata_server" {
   backend = "atlas"
   config = {
     name = "${var.tfe_organization}/${var.k8s_cluster_workspace}"
