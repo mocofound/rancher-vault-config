@@ -6,12 +6,12 @@ resource "vault_auth_backend" "k8s" {
   type = "kubernetes"
 
   #path = "${data.terraform_remote_state.k8s_cluster.vault_user}-${data.terraform_remote_state.k8s_cluster.environment}"
-  path        = "${data.terraform_remote_state.k8s_cluster.outputs.vault_user}-rancher"
+  path        = "${data.terraform_remote_state.userdata_server.outputs.vault_user}-rancher"
   description = "Vault Auth backend for Kubernetes"
 }
 
 provider "vault" {
-  address = data.terraform_remote_state.k8s_cluster.outputs.vault_addr
+  address = data.terraform_remote_state.userdata_server.outputs.vault_addr
 }
 
 data "terraform_remote_state" "userdata_server" {
@@ -22,15 +22,15 @@ data "terraform_remote_state" "userdata_server" {
 }
 
 provider "kubernetes" {
-  host = data.terraform_remote_state.k8s_cluster.outputs.k8s_endpoint
+  host = data.terraform_remote_state.userdata_server.outputs.k8s_endpoint
   client_certificate = base64decode(
-    data.terraform_remote_state.k8s_cluster.outputs.k8s_master_auth_client_certificate,
+    data.terraform_remote_state.userdata_server.outputs.k8s_master_auth_client_certificate,
   )
   client_key = base64decode(
-    data.terraform_remote_state.k8s_cluster.outputs.k8s_master_auth_client_key,
+    data.terraform_remote_state.userdata_server.outputs.k8s_master_auth_client_key,
   )
   cluster_ca_certificate = base64decode(
-    data.terraform_remote_state.k8s_cluster.outputs.k8s_master_auth_cluster_ca_certificate,
+    data.terraform_remote_state.userdata_server.outputs.k8s_master_auth_cluster_ca_certificate,
   )
 }
 
@@ -63,10 +63,10 @@ data "null_data_source" "read_token" {
 # instead of the a curl command in local-exec
 resource "vault_kubernetes_auth_backend_config" "auth_config" {
   backend         = vault_auth_backend.k8s.path
-  kubernetes_host = "https://${data.terraform_remote_state.k8s_cluster.outputs.k8s_endpoint}:443"
+  kubernetes_host = "https://${data.terraform_remote_state.userdata_server.outputs.k8s_endpoint}:443"
   kubernetes_ca_cert = chomp(
     base64decode(
-      data.terraform_remote_state.k8s_cluster.outputs.k8s_master_auth_cluster_ca_certificate,
+      data.terraform_remote_state.userdata_server.outputs.k8s_master_auth_cluster_ca_certificate,
     ),
   )
   token_reviewer_jwt = data.null_data_source.read_token.outputs["token"]
