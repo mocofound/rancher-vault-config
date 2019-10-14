@@ -1,0 +1,5 @@
+
+.terraform/plugins/darwin_amd64/lock.json
+.terraform/plugins/darwin_amd64/terraform-provider-kubernetes_v1.9.0_x4
+.terraform/plugins/darwin_amd64/terraform-provider-null_v2.1.2_x4
+.terraform/plugins/darwin_amd64/terraform-provider-vault_v2.4.0_x4
