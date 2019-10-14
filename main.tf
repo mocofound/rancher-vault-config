@@ -15,7 +15,7 @@ provider "vault" {
 }
 
 data "terraform_remote_state" "userdata_server" {
-  backend = "remote"
+  backend = "atlas"
   config = {
     name = "${var.tfe_organization}/${var.k8s_cluster_workspace}"
   }
