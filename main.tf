@@ -87,7 +87,7 @@ resource "vault_kubernetes_auth_backend_role" "role" {
   # If the expression in the following list itself returns a list, remove the
   # brackets to avoid interpretation as a list of lists. If the expression
   # returns a single list item then leave it as-is and remove this TODO comment.
-  policies = [data.terraform_remote_state.k8s_cluster.outputs.vault_user]
+  policies = [data.terraform_remote_state.userdata_server.outputs.vault_user]
   ttl      = 7200
 }
 
